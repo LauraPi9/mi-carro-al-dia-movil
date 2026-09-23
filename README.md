@@ -14,6 +14,7 @@ Scaffolding funcional en **Kotlin + Jetpack Compose** de las pantallas del mocku
    - **Paso 1:** nombre de la obligación y vehículo (lista desplegable con los vehículos registrados).
    - **Paso 2 — Fecha de vencimiento:** calendario mensual con selector de mes y año; no permite fechas pasadas.
    - **Paso 3 — Crear alarma:** resumen de la obligación con su estado (Al día / Por vencer), fecha de la alarma (por defecto 14 días antes del vencimiento) y hora. Al crearla se muestra el modal **"Alarma creada"** y "Entendido" regresa al dashboard.
+8. **Modal de cerrar sesión** (`LogoutConfirmDialog`) — aparece al pulsar "Salir" en el dashboard o el botón "salir" de cualquier pantalla interna. "Cancelar" o la X lo cierran; "Sí, cerrar sesión" vuelve al login.
 
 Las pantallas son completamente **navegables** (Navigation Compose) y los componentes interactivos (campos, toggle de contraseña, botones, banner de error) están **activos pero no conectados a un backend real**, tal como pide esta entrega.
 
@@ -25,7 +26,7 @@ app/src/main/java/com/micarroaldia/app/
 ├── navigation/MiCarroNavGraph.kt      # Rutas: login, forgot_password, confirmation, dashboard, register_vehicle, vehicle_list, new_obligation
 ├── data/                              # Vehículos en memoria (maqueta) y utilidades de fecha
 ├── ui/screens/                        # Las 7 pantallas
-├── ui/components/                     # Header, barra superior, campos, calendario, modal de éxito, botones
+├── ui/components/                     # Header, barra superior, campos, calendario, modales, botones
 └── ui/theme/                          # Colores, tipografía y tema Material 3
 ```
 

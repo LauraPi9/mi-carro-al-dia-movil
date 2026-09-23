@@ -1,6 +1,7 @@
 package com.micarroaldia.app.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.micarroaldia.app.ui.theme.ErrorRed
 import com.micarroaldia.app.ui.theme.NavyPrimary
@@ -164,21 +166,25 @@ fun AppPasswordField(
     }
 }
 
+private val CompactButtonPadding = PaddingValues(horizontal = 8.dp)
+
 @Composable
 fun PrimaryButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    compact: Boolean = false
 ) {
     Button(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp),
+            .height(if (compact) 44.dp else 50.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = NavyPrimary)
+        colors = ButtonDefaults.buttonColors(containerColor = NavyPrimary),
+        contentPadding = if (compact) CompactButtonPadding else ButtonDefaults.ContentPadding
     ) {
-        Text(text)
+        Text(text, fontSize = if (compact) 13.sp else TextUnit.Unspecified, maxLines = 1)
     }
 }
 
@@ -186,16 +192,18 @@ fun PrimaryButton(
 fun SecondaryButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    compact: Boolean = false
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp),
-        shape = RoundedCornerShape(10.dp)
+            .height(if (compact) 44.dp else 50.dp),
+        shape = RoundedCornerShape(10.dp),
+        contentPadding = if (compact) CompactButtonPadding else ButtonDefaults.ContentPadding
     ) {
-        Text(text, color = NavyPrimary)
+        Text(text, color = NavyPrimary, fontSize = if (compact) 13.sp else TextUnit.Unspecified, maxLines = 1)
     }
 }
 

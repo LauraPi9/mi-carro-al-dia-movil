@@ -1,11 +1,19 @@
 package com.micarroaldia.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.micarroaldia.app.data.VehicleRepository
+import com.micarroaldia.app.ui.components.LogoutConfirmDialog
 import com.micarroaldia.app.ui.screens.ConfirmationScreen
 import com.micarroaldia.app.ui.screens.DashboardScreen
 import com.micarroaldia.app.ui.screens.ForgotPasswordScreen
@@ -32,7 +40,25 @@ private fun NavHostController.logout() {
 
 @Composable
 fun MiCarroNavGraph(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = Routes.LOGIN) {
+
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    val requestLogout = { showLogoutDialog = true }
+
+    if (showLogoutDialog) {
+        LogoutConfirmDialog(
+            onConfirm = {
+                showLogoutDialog = false
+                navController.logout()
+            },
+            onDismiss = { showLogoutDialog = false }
+        )
+    }
+
+    NavHost(
+        navController = navController,
+        startDestination = Routes.LOGIN,
+        modifier = if (showLogoutDialog) Modifier.blur(4.dp) else Modifier
+    ) {
         composable(Routes.LOGIN) {
             LoginScreen(
                 onForgotPasswordClick = { navController.navigate(Routes.FORGOT_PASSWORD) },
@@ -58,7 +84,7 @@ fun MiCarroNavGraph(navController: NavHostController = rememberNavController()) 
         }
         composable(Routes.DASHBOARD) {
             DashboardScreen(
-                onLogoutClick = { navController.logout() },
+                onLogoutClick = requestLogout,
                 onRegisterVehicleClick = { navController.navigate(Routes.REGISTER_VEHICLE) },
                 onSeeAllVehiclesClick = { navController.navigate(Routes.VEHICLE_LIST) },
                 onNewObligationClick = { navController.navigate(Routes.NEW_OBLIGATION) }
@@ -67,7 +93,7 @@ fun MiCarroNavGraph(navController: NavHostController = rememberNavController()) 
         composable(Routes.REGISTER_VEHICLE) {
             RegisterVehicleScreen(
                 onBackClick = { navController.popBackStack() },
-                onLogoutClick = { navController.logout() },
+                onLogoutClick = requestLogout,
                 onVehicleSaved = { vehicle ->
                     VehicleRepository.add(vehicle)
                     navController.navigate(Routes.VEHICLE_LIST) {
@@ -81,7 +107,7 @@ fun MiCarroNavGraph(navController: NavHostController = rememberNavController()) 
             NewObligationScreen(
                 vehicles = VehicleRepository.vehicles,
                 onExit = { navController.popBackStack() },
-                onLogoutClick = { navController.logout() },
+                onLogoutClick = requestLogout,
                 onAlarmCreated = { navController.popBackStack(Routes.DASHBOARD, inclusive = false) }
             )
         }
@@ -89,7 +115,7 @@ fun MiCarroNavGraph(navController: NavHostController = rememberNavController()) 
             VehicleListScreen(
                 vehicles = VehicleRepository.vehicles,
                 onBackClick = { navController.popBackStack() },
-                onLogoutClick = { navController.logout() },
+                onLogoutClick = requestLogout,
                 onAddVehicleClick = { navController.navigate(Routes.REGISTER_VEHICLE) },
                 onGoHomeClick = { navController.popBackStack(Routes.DASHBOARD, inclusive = false) }
             )
