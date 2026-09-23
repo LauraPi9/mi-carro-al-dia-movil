@@ -1,6 +1,13 @@
 package com.micarroaldia.app.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -189,5 +196,72 @@ fun SecondaryButton(
         shape = RoundedCornerShape(10.dp)
     ) {
         Text(text, color = NavyPrimary)
+    }
+}
+
+@Composable
+fun AppPickerField(
+    label: String,
+    value: String,
+    onClick: () -> Unit,
+    trailingIcon: ImageVector,
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
+    required: Boolean = false,
+    labelFontWeight: FontWeight? = null,
+    isError: Boolean = false,
+    errorText: String = "",
+    helperText: String = ""
+) {
+    val shape = RoundedCornerShape(10.dp)
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = buildAnnotatedString {
+                append(label)
+                if (required) withStyle(SpanStyle(color = ErrorRed)) { append(" *") }
+            },
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = labelFontWeight,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Row(
+            modifier = Modifier
+                .padding(top = 6.dp)
+                .fillMaxWidth()
+                .height(56.dp)
+                .clip(shape)
+                .border(1.dp, if (isError) ErrorRed else OutlineGray, shape)
+                .clickable(onClick = onClick)
+                .padding(start = 16.dp, end = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = value.ifBlank { placeholder },
+                color = if (value.isBlank()) TextSecondary else MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+            Icon(
+                imageVector = trailingIcon,
+                contentDescription = null,
+                tint = TextSecondary,
+                modifier = Modifier.size(22.dp)
+            )
+        }
+        if (isError && errorText.isNotBlank()) {
+            Text(
+                text = errorText,
+                color = ErrorRed,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        } else if (helperText.isNotBlank()) {
+            Text(
+                text = helperText,
+                color = TextSecondary,
+                fontSize = 11.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
     }
 }

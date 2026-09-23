@@ -25,7 +25,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.outlined.NoteAdd
+import androidx.compose.material.icons.automirrored.outlined.NoteAdd
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -78,7 +78,8 @@ private val upcomingObligations = listOf(
 fun DashboardScreen(
     onLogoutClick: () -> Unit,
     onRegisterVehicleClick: () -> Unit,
-    onSeeAllVehiclesClick: () -> Unit
+    onSeeAllVehiclesClick: () -> Unit,
+    onNewObligationClick: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -120,9 +121,9 @@ fun DashboardScreen(
                 ActionCard(
                     title = "+ Nueva obligación",
                     subtitle = "SOAT, Tecno, Impuestos, Seguro",
-                    icon = Icons.Outlined.NoteAdd,
+                    icon = Icons.AutoMirrored.Outlined.NoteAdd,
                     dark = false,
-                    onClick = { showComingSoon("Nueva obligación disponible próximamente") }
+                    onClick = onNewObligationClick
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))

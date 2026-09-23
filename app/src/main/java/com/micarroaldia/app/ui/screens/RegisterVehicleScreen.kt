@@ -1,8 +1,6 @@
 package com.micarroaldia.app.ui.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,50 +9,37 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.micarroaldia.app.data.Vehicle
 import com.micarroaldia.app.ui.components.AppTextField
 import com.micarroaldia.app.ui.components.PrimaryButton
-import com.micarroaldia.app.ui.theme.NavyPrimary
+import com.micarroaldia.app.ui.components.ScreenTopBar
+import com.micarroaldia.app.ui.components.SuccessDialog
 import com.micarroaldia.app.ui.theme.OutlineGray
 import com.micarroaldia.app.ui.theme.SuccessGreen
 import com.micarroaldia.app.ui.theme.SuccessGreenLight
 import com.micarroaldia.app.ui.theme.SurfaceMuted
 import com.micarroaldia.app.ui.theme.TextSecondary
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterVehicleScreen(
     onBackClick: () -> Unit,
@@ -68,7 +53,12 @@ fun RegisterVehicleScreen(
     var showSuccessDialog by remember { mutableStateOf(false) }
 
     if (showSuccessDialog) {
-        VehicleCreatedDialog(
+        SuccessDialog(
+            title = "Vehículo creado",
+            message = "El vehículo se ha registrado exitosamente en el sistema.",
+            icon = Icons.Outlined.CheckCircle,
+            iconTint = SuccessGreen,
+            iconBackground = SuccessGreenLight,
             onDismiss = {
                 showSuccessDialog = false
                 onVehicleSaved(
@@ -85,35 +75,12 @@ fun RegisterVehicleScreen(
     Scaffold(
         modifier = if (showSuccessDialog) Modifier.blur(4.dp) else Modifier,
         topBar = {
-            Column {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text("Registrar vehículo", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = onBackClick) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
-                        }
-                    },
-                    actions = {
-                        Surface(
-                            onClick = onLogoutClick,
-                            modifier = Modifier.padding(end = 12.dp).size(34.dp),
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.surface,
-                            border = BorderStroke(1.dp, OutlineGray)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text("salir", fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = NavyPrimary)
-                            }
-                        }
-                    },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    )
-                )
-                HorizontalDivider(color = OutlineGray)
-            }
+            ScreenTopBar(
+                title = "Registrar vehículo",
+                onBackClick = onBackClick,
+                onLogoutClick = onLogoutClick,
+                centered = true
+            )
         },
         bottomBar = {
             Column(
@@ -200,68 +167,6 @@ fun RegisterVehicleScreen(
                 isError = showErrors && model.isBlank(),
                 errorText = "Ingresa el modelo del vehículo"
             )
-        }
-    }
-}
-
-@Composable
-private fun VehicleCreatedDialog(onDismiss: () -> Unit) {
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surface
-        ) {
-            Box {
-                IconButton(
-                    onClick = onDismiss,
-                    modifier = Modifier.align(Alignment.TopEnd)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = "Cerrar",
-                        tint = TextSecondary,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(44.dp)
-                            .background(SuccessGreenLight, CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.CheckCircle,
-                            contentDescription = null,
-                            tint = SuccessGreen,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    Text(
-                        text = "Vehículo creado",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "El vehículo se ha registrado exitosamente en el sistema.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = TextSecondary,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(top = 6.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    PrimaryButton(text = "Entendido", onClick = onDismiss)
-                }
-            }
         }
     }
 }

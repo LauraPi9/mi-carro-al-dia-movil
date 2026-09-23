@@ -10,6 +10,7 @@ import com.micarroaldia.app.ui.screens.ConfirmationScreen
 import com.micarroaldia.app.ui.screens.DashboardScreen
 import com.micarroaldia.app.ui.screens.ForgotPasswordScreen
 import com.micarroaldia.app.ui.screens.LoginScreen
+import com.micarroaldia.app.ui.screens.NewObligationScreen
 import com.micarroaldia.app.ui.screens.RegisterVehicleScreen
 import com.micarroaldia.app.ui.screens.VehicleListScreen
 
@@ -20,6 +21,7 @@ object Routes {
     const val DASHBOARD = "dashboard"
     const val REGISTER_VEHICLE = "register_vehicle"
     const val VEHICLE_LIST = "vehicle_list"
+    const val NEW_OBLIGATION = "new_obligation"
 }
 
 private fun NavHostController.logout() {
@@ -58,7 +60,8 @@ fun MiCarroNavGraph(navController: NavHostController = rememberNavController()) 
             DashboardScreen(
                 onLogoutClick = { navController.logout() },
                 onRegisterVehicleClick = { navController.navigate(Routes.REGISTER_VEHICLE) },
-                onSeeAllVehiclesClick = { navController.navigate(Routes.VEHICLE_LIST) }
+                onSeeAllVehiclesClick = { navController.navigate(Routes.VEHICLE_LIST) },
+                onNewObligationClick = { navController.navigate(Routes.NEW_OBLIGATION) }
             )
         }
         composable(Routes.REGISTER_VEHICLE) {
@@ -72,6 +75,14 @@ fun MiCarroNavGraph(navController: NavHostController = rememberNavController()) 
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+        composable(Routes.NEW_OBLIGATION) {
+            NewObligationScreen(
+                vehicles = VehicleRepository.vehicles,
+                onExit = { navController.popBackStack() },
+                onLogoutClick = { navController.logout() },
+                onAlarmCreated = { navController.popBackStack(Routes.DASHBOARD, inclusive = false) }
             )
         }
         composable(Routes.VEHICLE_LIST) {

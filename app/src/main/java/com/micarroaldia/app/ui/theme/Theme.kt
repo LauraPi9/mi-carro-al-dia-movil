@@ -16,7 +16,15 @@ private val LightColors = lightColorScheme(
     onBackground = TextPrimary,
     surface = SurfaceWhite,
     onSurface = TextPrimary,
-    outline = OutlineGray
+    outline = OutlineGray,
+
+    primaryContainer = AccentBlueLight,
+    onPrimaryContainer = NavyPrimary,
+    tertiaryContainer = AccentBlueLight,
+    onTertiaryContainer = NavyPrimary,
+    surfaceContainer = SurfaceWhite,
+    surfaceContainerHigh = SurfaceWhite,
+    surfaceContainerHighest = SurfaceMuted
 )
 
 private val DarkColors = darkColorScheme(
