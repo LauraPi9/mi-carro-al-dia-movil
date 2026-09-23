@@ -73,7 +73,7 @@ fun ConfirmationScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Se ha enviado un correo de confirmación para restablecer tu contraseña",
+                        text = "Se ha enviado un correo de confirmación para restablecer su contraseña",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         textAlign = TextAlign.Center,
@@ -83,7 +83,7 @@ fun ConfirmationScreen(
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        text = "Por favor revisa tu bandeja de entrada y sigue las instrucciones para crear una nueva contraseña.",
+                        text = "Por favor verifique la bandeja de entrada de su correo o spam.",
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
                         color = TextSecondary
