@@ -23,10 +23,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.micarroaldia.app.ui.theme.ErrorRed
 import com.micarroaldia.app.ui.theme.NavyPrimary
 import com.micarroaldia.app.ui.theme.OutlineGray
@@ -41,12 +47,21 @@ fun AppTextField(
     placeholder: String = "",
     isError: Boolean = false,
     errorText: String = "",
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
+    required: Boolean = false,
+    labelFontWeight: FontWeight? = null,
+    helperText: String = "",
+    trailingContent: (@Composable () -> Unit)? = null
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = label,
+            text = buildAnnotatedString {
+                append(label)
+                if (required) withStyle(SpanStyle(color = ErrorRed)) { append(" *") }
+            },
             style = MaterialTheme.typography.bodyMedium,
+            fontWeight = labelFontWeight,
             color = MaterialTheme.colorScheme.onBackground
         )
         OutlinedTextField(
@@ -59,7 +74,11 @@ fun AppTextField(
             singleLine = true,
             isError = isError,
             shape = RoundedCornerShape(10.dp),
-            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = keyboardType),
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                keyboardType = keyboardType,
+                capitalization = capitalization
+            ),
+            trailingIcon = trailingContent,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = NavyPrimary,
                 unfocusedBorderColor = OutlineGray,
@@ -71,6 +90,13 @@ fun AppTextField(
                 text = errorText,
                 color = ErrorRed,
                 style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        } else if (helperText.isNotBlank()) {
+            Text(
+                text = helperText,
+                color = TextSecondary,
+                fontSize = 11.sp,
                 modifier = Modifier.padding(top = 4.dp)
             )
         }

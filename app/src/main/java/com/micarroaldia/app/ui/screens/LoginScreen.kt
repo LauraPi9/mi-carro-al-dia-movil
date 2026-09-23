@@ -37,7 +37,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    onForgotPasswordClick: () -> Unit
+    onForgotPasswordClick: () -> Unit,
+    onLoginSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -111,9 +112,7 @@ fun LoginScreen(
                         showError = true
                     } else {
                         showError = false
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar("Inicio de sesión simulado (maqueta sin backend)")
-                        }
+                        onLoginSuccess()
                     }
                 }
             )
